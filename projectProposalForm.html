@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/combined-styles.css">
+    <link rel="stylesheet" href="projectProposalFormBody.css">
+    <title>Project Proposal Form</title>
+    <style>
+        .header-right {
+            background-color: #4CAF50; /* Example color, change as needed */
+        }
+    </style>
+</head>
+<body>
+    <form id="proposalForm">
+        <div class="form-container">
+            <div class="form-header">
+                <div class="header-left">
+                    <div class="input-field">
+                        <input type="text" id="studentName" class="input" oninput="updateName()" style="width: 100%; height: 8px;" placeholder="Name">
+                    </div>
+                </div>
+                <div class="header-center" id="currentDate">
+                </div>
+                <div class="header-right">
+                    Project Proposal Form
+                </div>
+            </div>
+            <div class="header-line"></div><br>
+            <div class="form-body">
+                <div class="form-left">
+                    <input type="text" class="project-name-input" placeholder="Proposed project name: ">
+                    <!-- Dropdown for selecting a coach -->
+                    <select class="coach-select" onchange="toggleEmailInput(this)">
+                        <option value="">Select a Coach</option>
+                        <!-- Add more faculty options here -->
+                        <option value="other">Other (Specify Email)</option>
+                    </select>
+                        <!-- Input field for outside email, initially hidden -->
+                    <input type="email" class="outside-email-input" placeholder="Enter Outside Email" style="display: none;">
+                    <button type="button" onclick="submitForm()">Submit</button>
+                </div>
+                <div class="form-right">
+                    <textarea class="project-description" placeholder="Describe your project here..."></textarea>
+                </div>
+            </div>        
+            <!-- Uncomment this section when ready to collect student's name directly from the form -->
+            <!--
+            <div class="input-field">
+                <label for="studentName" class="label">Student Name:</label>
+                <input type="text" id="studentName" class="input" oninput="updateName()">
+            </div>
+            -->
+            <!-- Form content goes here -->
+            <!-- Add more fields as needed -->
+        </div>
+    </form> 
+    <script src="../js/commonScripts.js"></script>
+    <script>
+        window.onload = function() {
+            fetchTeachers();
+        };
+    
+        function fetchTeachers() {
+            fetch('https://script.google.com/macros/s/AKfycbxzc0yvo_EVFJjdOEK2YoBC1P3hXffOFgIgeCbLVCD_k5zixgS3tdM7ZAlE0Yc3Sr1o/exec')
+            .then(response => response.json())
+            .then(data => {
+                const selectElement = document.querySelector('.coach-select');
+                data.forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher[1]; // Assuming teacher[1] is the email
+                    option.textContent = teacher[0]; // Assuming teacher[0] is the name
+                    selectElement.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+    
+</body>
+</html>
